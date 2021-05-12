@@ -1,3 +1,37 @@
+const dom = {
+    oneButton: document.querySelector('#one-button'),
+    twoButton: document.querySelector('#two-button'),
+    threeButton: document.querySelector('#three-button'),
+    fourButton: document.querySelector('#four-button'),
+    fiveButton: document.querySelector('#five-button'),
+    sixButton: document.querySelector('#six-button'),
+    sevenButton: document.querySelector('#seven-button'),
+    eightButton: document.querySelector('#eight-button'),
+    nineButton: document.querySelector('#nine-button'),
+    zeroButton: document.querySelector('#zero-button'),
+    
+    additionButton: document.querySelector('#addition-button'),
+    subtractionButton: document.querySelector('#subtraction-button'),
+    multiplicationButton: document.querySelector('#multiplication-button'),
+    divisionButton: document.querySelector('#division-button'),
+    equalityButton: document.querySelector('#equality-button'),
+    operateButton: document.querySelector('#operate-button'),
+    clearButton: document.querySelector('#clear-button'),
+    decimalButton: document.querySelector('#decimal-button'),
+    allClearButton: document.querySelector('#all-clear-button'),
+    
+    screenValue: document.querySelector('#screen-value'),
+    setScreenText: function(a) {
+        this.screenValue.textContent = a;
+    },
+    appendScreenText: function(a) {
+        this.screenValue.textContent += a;
+    },
+    getScreenValue: function() {
+        return parseInt(this.screenValue.textContent);
+    },
+};
+
 const operations = {
     add: function(a, b) {
         return a + b;
@@ -23,39 +57,6 @@ const operations = {
         } else {
             return 'ERROR: Something went wrong.';
         }
-    },
-};
-
-const dom = {
-    oneButton: document.querySelector('#one-button'),
-    twoButton: document.querySelector('#two-button'),
-    threeButton: document.querySelector('#three-button'),
-    fourButton: document.querySelector('#four-button'),
-    fiveButton: document.querySelector('#five-button'),
-    sixButton: document.querySelector('#six-button'),
-    sevenButton: document.querySelector('#seven-button'),
-    eightButton: document.querySelector('#eight-button'),
-    nineButton: document.querySelector('#nine-button'),
-    zeroButton: document.querySelector('#zero-button'),
-    
-    additionButton: document.querySelector('#addition-button'),
-    subtractionButton: document.querySelector('#subtraction-button'),
-    multiplicationButton: document.querySelector('#multiplication-button'),
-    divisionButton: document.querySelector('#division-button'),
-    equalityButton: document.querySelector('#equality-button'),
-    operateButton: document.querySelector('#operate-button'),
-    clearButton: document.querySelector('#clear-button'),
-    decimalButton: document.querySelector('#decimal-button'),
-    allClearButton: document.querySelector('#all-clear-button'),
-    screenValue: document.querySelector('#screen-value'),
-    setScreenText: function(a) {
-        this.screenValue.textContent = a;
-    },
-    appendScreenText: function(a) {
-        this.screenValue.textContent += a;
-    },
-    getScreenValue: function() {
-        return parseInt(this.screenValue.textContent);
     },
 };
 
@@ -131,20 +132,37 @@ dom.zeroButton.addEventListener('click', () => {
 });
 
 dom.additionButton.addEventListener('click', () => {
+    currentOperation = 'add';
     newOperation = true;
-    setPlaceholder(dom.getScreenValue());
+    setNum(dom.getScreenValue());
+    operationsCount++;
 });
 dom.subtractionButton.addEventListener('click', () => {
+    currentOperation = 'subtract';
     newOperation = true;
+    setNum(dom.getScreenValue());
+    operationsCount++;
+    showCurrentTotal();
 });
 dom.multiplicationButton.addEventListener('click', () => {
+    currentOperation = 'multiply';
     newOperation = true;
+    setNum(dom.getScreenValue());
+    operationsCount++;
 });
 dom.divisionButton.addEventListener('click', () => {
+    currentOperation = 'divide';
     newOperation = true;
+    setNum(dom.getScreenValue());
+    operationsCount++;
 });
 dom.equalityButton.addEventListener('click', () => {
     newOperation = true;
+    setNum(dom.getScreenValue());
+    currentTotal = operations.operate(currentOperation, firstNum, secondNum);
+    firstNum = currentTotal;
+    operationsCount++;
+    dom.setScreenText(currentTotal);
 });
 dom.operateButton.addEventListener('click', () => {
     newOperation = true;
@@ -154,25 +172,56 @@ dom.clearButton.addEventListener('click', () => {
 });
 dom.allClearButton.addEventListener('click', () => {
     dom.setScreenText('');
+    operationsCount = 0;
+    currentTotal = 0;
+    firstNum = 0;
+    secondNum = 0;
 });
 dom.decimalButton.addEventListener('click', () => {
     dom.appendScreenText('.');
 });
 
+let operationsCount = 0;
+let newOperation = false;
+let currentOperation = '';
 let currentTotal = 0;
-let firstPlaceholder;
-let secondPlaceholer;
-let newOperation;
+let firstNum = 0;
+let secondNum = 0;
 
-function setPlaceholder(a) {
-    if (firstPlaceholder === undefined) {
-        firstPlaceholder = a;
-        secondPlaceholder = undefined;
-    } else if (secondPlaceholder === undefined) {
-        secondPlaceholder === a;
-        firstPlaceholder = undefined;
+let functionButtons = [dom.additionButton, dom.subtractionButton, dom.multiplicationButton, dom.divisionButton, dom.equalityButton, dom.operateButton, dom.clearButton, dom.decimalButton, dom.allClearButton];
+
+function setNum(num) {
+    if (operationsCount === 0) {
+        firstNum = num;
+    } else {
+        secondNum = num;
+    } 
+}
+
+function showCurrentTotal() {
+    if (operationsCount >= 1) {
+        return currentTotal;
+    } 
+}
+
+function disableFunctionButtons() {
+    for (let i = 0; i < functionButtons.length; i++) {
+        functionButtons[i].disabled = true;
     }
 }
+
+function enableFunctionButtons() {
+    for (let i = 0; i < functionButtons.length; i++) {
+        functionButtons[i].disabled = false;
+    }
+}
+
+
+
+
+
+
+
 
 
 
