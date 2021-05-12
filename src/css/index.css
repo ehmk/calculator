@@ -1,3 +1,74 @@
 body {
     background-color: black;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+button {
+    background-color: black;
+    border-color: white;
+    color: white;
+    font-size: 2em;
+}
+
+button:hover {
+    border-color:aquamarine;
+    color: aquamarine;
+}
+
+.calculator-container {
+    display: grid;
+    border-style: solid;
+    border-color: white;
+    width: 75%;
+    margin: 100px auto;
+}
+
+.screen {
+    display: flex;
+    border-style: solid;
+    border-color: white;
+    flex-direction: column;
+    height: 100px;
+    max-width: 90%;
+    margin: 5px;
+    padding: 10px;
+}
+
+.screen > p {
+    color: white;
+    font-size: 2em;
+
+}
+
+.buttons {
+    display: grid;
+    margin: 10px;
+    border-style: solid;
+    border-color: white;
+    grid-template-columns: 1fr 1fr;
+}
+
+.number-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.operation-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 725px) {
+    .calculator-container {
+        width: 90%;
+    }
+    .buttons {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+    .screen {
+        width: 95%;
+    }
 }
