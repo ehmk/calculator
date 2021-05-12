@@ -1,22 +1,14 @@
 const operations = {
     add: function(a, b) {
-        currentTotal = a + b;
-        screenValue.textContent = currentTotal;
         return a + b;
     },
     subtract: function(a, b) {
-        currentTotal = a + b;
-        screenValue.textContent = currentTotal;
         return a - b;
     },
     multiply: function(a, b) {
-        currentTotal = a + b;
-        screenValue.textContent = currentTotal;
         return a * b;
     },
     divide: function(a, b) {
-        currentTotal = a + b;
-        screenValue.textContent = currentTotal;
         return a / b;
     },
     operate: function(operation, a, b) {
@@ -53,35 +45,135 @@ const dom = {
     equalityButton: document.querySelector('#equality-button'),
     operateButton: document.querySelector('#operate-button'),
     clearButton: document.querySelector('#clear-button'),
+    decimalButton: document.querySelector('#decimal-button'),
+    allClearButton: document.querySelector('#all-clear-button'),
+    screenValue: document.querySelector('#screen-value'),
+    setScreenText: function(a) {
+        this.screenValue.textContent = a;
+    },
+    appendScreenText: function(a) {
+        this.screenValue.textContent += a;
+    },
+    getScreenValue: function() {
+        return parseInt(this.screenValue.textContent);
+    },
 };
 
-dom.oneButton.addEventListener('click', () => screenValue.textContent += '1');
-dom.twoButton.addEventListener('click', () => screenValue.textContent += '2');
-dom.threeButton.addEventListener('click', () => screenValue.textContent += '3');
-dom.fourButton.addEventListener('click', () => screenValue.textContent += '4');
-dom.fiveButton.addEventListener('click', () => screenValue.textContent += '5');
-dom.sixButton.addEventListener('click', () => screenValue.textContent += '6');
-dom.sevenButton.addEventListener('click', () => screenValue.textContent += '7');
-dom.eightButton.addEventListener('click', () => screenValue.textContent += '8');
-dom.nineButton.addEventListener('click', () => screenValue.textContent += '9');
-dom.zeroButton.addEventListener('click', () => screenValue.textContent += '0');
+dom.oneButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(1);
+});
+dom.twoButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(2);
+});
+dom.threeButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(3);
+});
+dom.fourButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(4);
+});
+dom.fiveButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(5);
+});
+dom.sixButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(6);
+});
+dom.sevenButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(7);
+});
+dom.eightButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(8);
+});
+dom.nineButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(9);
+});
+dom.zeroButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        dom.setScreenText('');
+        newOperation = false;
+    }
+    dom.appendScreenText(0);
+});
 
 dom.additionButton.addEventListener('click', () => {
-    firstValue = screenValue.textContent;
-    currentTotal = operations.add(currentTotal, firstValue);
-    screenValue.textContent = '';
+    newOperation = true;
+    setPlaceholder(dom.getScreenValue());
 });
-dom.subtractionButton.addEventListener('click', () => screenValue.textContent = '');
-dom.multiplicationButton.addEventListener('click', () => screenValue.textContent = '');
-dom.divisionButton.addEventListener('click', () => screenValue.textContent = '');
-dom.equalityButton.addEventListener('click', () => screenValue.textContent = '');
-dom.operateButton.addEventListener('click', () => screenValue.textContent = '');
-dom.clearButton.addEventListener('click', () => screenValue.textContent = '');
+dom.subtractionButton.addEventListener('click', () => {
+    newOperation = true;
+});
+dom.multiplicationButton.addEventListener('click', () => {
+    newOperation = true;
+});
+dom.divisionButton.addEventListener('click', () => {
+    newOperation = true;
+});
+dom.equalityButton.addEventListener('click', () => {
+    newOperation = true;
+});
+dom.operateButton.addEventListener('click', () => {
+    newOperation = true;
+});
+dom.clearButton.addEventListener('click', () => {
+    dom.setScreenText('');
+});
+dom.allClearButton.addEventListener('click', () => {
+    dom.setScreenText('');
+});
+dom.decimalButton.addEventListener('click', () => {
+    dom.appendScreenText('.');
+});
 
-let screenValue = document.querySelector('#screen-value');
 let currentTotal = 0;
-let firstValue;
-let secondValue;
+let firstPlaceholder;
+let secondPlaceholer;
+let newOperation;
+
+function setPlaceholder(a) {
+    if (firstPlaceholder === undefined) {
+        firstPlaceholder = a;
+        secondPlaceholder = undefined;
+    } else if (secondPlaceholder === undefined) {
+        secondPlaceholder === a;
+        firstPlaceholder = undefined;
+    }
+}
+
 
 
 
