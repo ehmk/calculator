@@ -66,7 +66,11 @@ dom.eightButton.addEventListener('click', () => screenValue.textContent += '8');
 dom.nineButton.addEventListener('click', () => screenValue.textContent += '9');
 dom.zeroButton.addEventListener('click', () => screenValue.textContent += '0');
 
-dom.additionButton.addEventListener('click', () => screenValue.textContent = operations.add(currentTotal + screenValue.value));
+dom.additionButton.addEventListener('click', () => {
+    firstValue = screenValue.textContent;
+    currentTotal = operations.add(currentTotal, firstValue);
+    screenValue.textContent = '';
+});
 dom.subtractionButton.addEventListener('click', () => screenValue.textContent = '');
 dom.multiplicationButton.addEventListener('click', () => screenValue.textContent = '');
 dom.divisionButton.addEventListener('click', () => screenValue.textContent = '');
@@ -76,6 +80,8 @@ dom.clearButton.addEventListener('click', () => screenValue.textContent = '');
 
 let screenValue = document.querySelector('#screen-value');
 let currentTotal = 0;
+let firstValue;
+let secondValue;
 
 
 
