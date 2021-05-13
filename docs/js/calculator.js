@@ -66,6 +66,7 @@ dom.oneButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(1);
+    lastInput = 'one';
 });
 dom.twoButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -73,6 +74,7 @@ dom.twoButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(2);
+    lastInput = 'two';
 });
 dom.threeButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -80,6 +82,7 @@ dom.threeButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(3);
+    lastInput = 'three';
 });
 dom.fourButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -87,6 +90,7 @@ dom.fourButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(4);
+    lastInput = 'four';
 });
 dom.fiveButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -94,6 +98,7 @@ dom.fiveButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(5);
+    lastInput = 'five';
 });
 dom.sixButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -101,6 +106,7 @@ dom.sixButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(6);
+    lastInput = 'six';
 });
 dom.sevenButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -108,6 +114,7 @@ dom.sevenButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(7);
+    lastInput = 'seven';
 });
 dom.eightButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -115,6 +122,7 @@ dom.eightButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(8);
+    lastInput = 'eight';
 });
 dom.nineButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -122,6 +130,7 @@ dom.nineButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(9);
+    lastInput = 'nine';
 });
 dom.zeroButton.addEventListener('click', () => {
     if (newOperation === true) {
@@ -129,45 +138,63 @@ dom.zeroButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(0);
+    lastInput = 'zero';
 });
 
 dom.additionButton.addEventListener('click', () => {
-    currentOperation = 'add';
-    newOperation = true;
-    setNum(dom.getScreenValue());
-    operationsCount++;
+    if (lastInput === 'plus') {
+        return;
+    } else {
+        currentOperation = 'add';
+        newOperation = true;
+        setNum(dom.getScreenValue());
+        currentTotal = operations.operate(currentOperation, firstNum, secondNum);
+        firstNum = currentTotal;
+        operationsCount++;
+    }
+    lastInput = 'plus';
 });
 dom.subtractionButton.addEventListener('click', () => {
     currentOperation = 'subtract';
     newOperation = true;
     setNum(dom.getScreenValue());
     operationsCount++;
+    lastInput = 'minus';
 });
 dom.multiplicationButton.addEventListener('click', () => {
     currentOperation = 'multiply';
     newOperation = true;
     setNum(dom.getScreenValue());
     operationsCount++;
+    lastInput = 'multiply';
 });
 dom.divisionButton.addEventListener('click', () => {
     currentOperation = 'divide';
     newOperation = true;
     setNum(dom.getScreenValue());
     operationsCount++;
+    lastInput = 'divide';
 });
 dom.equalityButton.addEventListener('click', () => {
-    newOperation = true;
-    setNum(dom.getScreenValue());
-    currentTotal = operations.operate(currentOperation, firstNum, secondNum);
-    firstNum = currentTotal;
-    operationsCount++;
-    dom.setScreenText(currentTotal);
+    if (lastInput === 'equals') {
+        return;
+    } else {
+        newOperation = true;
+        setNum(dom.getScreenValue());
+        currentTotal = operations.operate(currentOperation, firstNum, secondNum);
+        firstNum = currentTotal;
+        operationsCount++;
+        dom.setScreenText(currentTotal);
+    }
+    lastInput = 'equals';
 });
 dom.operateButton.addEventListener('click', () => {
     newOperation = true;
+    lastInput = 'operate';
 });
 dom.clearButton.addEventListener('click', () => {
     dom.setScreenText('');
+    lastInput = 'clear';
 });
 dom.allClearButton.addEventListener('click', () => {
     dom.setScreenText('');
@@ -175,6 +202,7 @@ dom.allClearButton.addEventListener('click', () => {
     currentTotal = 0;
     firstNum = 0;
     secondNum = 0;
+    lastInput = 'all clear';
 });
 dom.decimalButton.addEventListener('click', () => {
     if(dom.screenValue.textContent.includes(".")) {
@@ -182,11 +210,13 @@ dom.decimalButton.addEventListener('click', () => {
     } else {
         dom.appendScreenText('.');
     }
+    lastInput = 'decimal';
 });
 
 let operationsCount = 0;
 let newOperation = false;
 let currentOperation = '';
+let lastInput = '';
 let currentTotal = 0;
 let firstNum = 0;
 let secondNum = 0;
@@ -201,10 +231,12 @@ function setNum(num) {
     } 
 }
 
-function getCurrentTotal() {
+function displayCurrentTotal() {
     if (operationsCount >= 1) {
-        return currentTotal;
-    } 
+        dom.setScreenText(currentTotal);
+    } else {
+        return;
+    }
 }
 
 function disableFunctionButtons() {
