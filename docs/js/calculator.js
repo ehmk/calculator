@@ -28,7 +28,7 @@ const dom = {
         this.screenValue.textContent += a;
     },
     getScreenValue: function() {
-        return parseInt(this.screenValue.textContent);
+        return parseFloat(this.screenValue.textContent);
     },
 };
 
@@ -142,7 +142,6 @@ dom.subtractionButton.addEventListener('click', () => {
     newOperation = true;
     setNum(dom.getScreenValue());
     operationsCount++;
-    showCurrentTotal();
 });
 dom.multiplicationButton.addEventListener('click', () => {
     currentOperation = 'multiply';
@@ -178,7 +177,11 @@ dom.allClearButton.addEventListener('click', () => {
     secondNum = 0;
 });
 dom.decimalButton.addEventListener('click', () => {
-    dom.appendScreenText('.');
+    if(dom.screenValue.textContent.includes(".")) {
+        return;
+    } else {
+        dom.appendScreenText('.');
+    }
 });
 
 let operationsCount = 0;
@@ -198,7 +201,7 @@ function setNum(num) {
     } 
 }
 
-function showCurrentTotal() {
+function getCurrentTotal() {
     if (operationsCount >= 1) {
         return currentTotal;
     } 
