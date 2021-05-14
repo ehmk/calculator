@@ -7,7 +7,7 @@ let currentTotal = 0;
 let lockedValue = 0;
 let currentValue = 0;
 
-const dom = {
+const buttons = {
     oneButton: document.querySelector('#one-button'),
     twoButton: document.querySelector('#two-button'),
     threeButton: document.querySelector('#three-button'),
@@ -28,17 +28,6 @@ const dom = {
     clearButton: document.querySelector('#clear-button'),
     decimalButton: document.querySelector('#decimal-button'),
     allClearButton: document.querySelector('#all-clear-button'),
-    
-    screenValue: document.querySelector('#screen-value'),
-    setScreenText: function(a) {
-        this.screenValue.textContent = a;
-    },
-    appendScreenText: function(a) {
-        this.screenValue.textContent += a;
-    },
-    getScreenValue: function() {
-        return parseFloat(this.screenValue.textContent);
-    },
 };
 
 const lowLevelOperations = {
@@ -69,98 +58,6 @@ const lowLevelOperations = {
     },
 };
 
-dom.oneButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(1);
-    appendNum('1');
-    lastInput = 'one';
-});
-dom.twoButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(2);
-    appendNum('2');
-    lastInput = 'two';
-});
-dom.threeButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(3);
-    appendNum('3');
-    lastInput = 'three';
-});
-dom.fourButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(4);
-    appendNum('4');
-    lastInput = 'four';
-});
-dom.fiveButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(5);
-    appendNum('5');
-    lastInput = 'five';
-});
-dom.sixButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(6);
-    appendNum('6');
-    lastInput = 'six';
-});
-dom.sevenButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(7);
-    appendNum('7');
-    lastInput = 'seven';
-});
-dom.eightButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(8);
-    appendNum('8');
-    lastInput = 'eight';
-});
-dom.nineButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(9);
-    appendNum('9');
-    lastInput = 'nine';
-});
-dom.zeroButton.addEventListener('click', () => {
-    if (newOperation === true) {
-        dom.setScreenText('');
-        newOperation = false;
-    }
-    dom.appendScreenText(0);
-    appendNum('0');
-    lastInput = 'zero';
-});
-
-
 const domOperations = {
     addition: function() {
         newOperation = true;
@@ -171,25 +68,24 @@ const domOperations = {
             return;
         } else if (currentOperation === lastOperation) {
             currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
-            lockCurrentTotal()
-            displayCurrentTotal();
+            this.lockCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
-            lockCurrentValue();
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('addition', currentTotal, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             lockedValue = currentTotal;
             currentValue = 0;
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else {
-            lockCurrentValue();
             currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
-            lockCurrentTotal();
-            displayCurrentTotal();
+            this.lockCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         }
         lastInput = 'addition';
@@ -204,23 +100,23 @@ const domOperations = {
             return;
         } else if (currentOperation === lastOperation) {
             currentTotal = lowLevelOperations.operate('subtraction', lockedValue, currentValue);
-            lockCurrentTotal()
-            displayCurrentTotal();
+            this.lockCurrentTotal()
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
-            lockCurrentValue();
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('subtraction', currentTotal, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
-            lockCurrentTotal();
-            displayCurrentTotal();
+            this.lockCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else {
-            lockCurrentValue();
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('subtraction', lockedValue, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         }
         lastInput = 'subtraction';
@@ -235,23 +131,23 @@ const domOperations = {
             return;
         } else if (currentOperation === lastOperation) {
             currentTotal = lowLevelOperations.operate('multiplication', lockedValue, currentValue);
-            lockCurrentTotal()
-            displayCurrentTotal();
+            this.lockCurrentTotal()
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
-            lockCurrentValue();
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('multiplication', currentTotal, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
-            lockCurrentTotal()
-            displayCurrentTotal();
+            this.lockCurrentTotal()
+            this.displayCurrentTotal();
             operationsCount++;
         } else {
-            lockCurrentValue();
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('multiplication', lockedValue, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         }
         lastInput = 'multiplication';
@@ -266,29 +162,28 @@ const domOperations = {
             return;
         } else if (currentOperation === lastOperation) {
             currentTotal = lowLevelOperations.operate('division', lockedValue, currentValue);
-            lockCurrentTotal()
-            displayCurrentTotal();
+            this.lockCurrentTotal()
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
-            lockCurrentValue();
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('division', currentTotal, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
-            lockCurrentTotal()
-            displayCurrentTotal();
+            this.lockCurrentTotal()
+            this.displayCurrentTotal();
             operationsCount++;
         } else if (operationsCount === 0) {
-            lockCurrentValue();
+            this.lockCurrentValue();
             operationsCount++;
             lastOperation = 'division';
             return;
-        } 
-        else {
-            lockCurrentValue();
+        } else {
+            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('division', lockedValue, currentValue);
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         }
         lastInput = 'division';
@@ -301,91 +196,182 @@ const domOperations = {
             newOperation = true;
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             lockedValue = currentTotal;
-            displayCurrentTotal();
+            this.displayCurrentTotal();
             operationsCount++;
         }
         lastInput = 'equals';
         lastOperation = 'equality';
     },
+    appendNum: function(num) {
+        currentValue += num; 
+        if (num !== '.') {
+            lockedValue = parseFloat(lockedValue);
+            currentValue = parseFloat(currentValue);
+        }
+    },
+    displayCurrentTotal: function() {
+        if (operationsCount >= 1) {
+            domOperations.setScreenText(currentTotal);
+        } else {
+            return;
+        }
+    },
+    lockCurrentValue: function() {
+        lockedValue = currentValue;
+        currentValue = 0;
+    },
+    lockCurrentTotal: function() {
+        lockedValue = currentTotal;
+        currentValue = 0;
+    },
+    resetAll: function() {
+        domOperations.setScreenText('');
+        operationsCount = 0;
+        currentTotal = 0;
+        currentOperation = '';
+        lockedValue = 0; 
+        currentValue = 0;
+        lastInput = 'all clear';
+        lastOperation = '';
+    },
+    clearScreen: function() {
+        domOperations.setScreenText('');
+        currentValue = 0;
+        lastInput = 'clear';
+    },
+    appendDecimal: function() {
+        if(dom.screenValue.textContent.includes(".")) {
+            return;
+        } else {
+            domOperations.appendScreenText('.');
+            this.appendNum('.');
+        }
+        lastInput = 'decimal';
+    },
+    appendScreenText: function(a) {
+        this.screenValue.textContent += a;
+    },
+    setScreenText: function(a) {
+        this.screenValue.textContent = a;
+    },
+    screenValue: document.querySelector('#screen-value'),
 }; 
 
-dom.additionButton.addEventListener('click', () => {
+buttons.oneButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(1);
+    domOperations.appendNum('1');
+    lastInput = 'one';
+});
+buttons.twoButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(2);
+    domOperations.appendNum('2');
+    lastInput = 'two';
+});
+buttons.threeButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(3);
+    domOperations.appendNum('3');
+    lastInput = 'three';
+});
+buttons.fourButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(4);
+    domOperations.appendNum('4');
+    lastInput = 'four';
+});
+buttons.fiveButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(5);
+    domOperations.appendNum('5');
+    lastInput = 'five';
+});
+buttons.sixButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(6);
+    domOperations.appendNum('6');
+    lastInput = 'six';
+});
+buttons.sevenButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(7);
+    domOperations.appendNum('7');
+    lastInput = 'seven';
+});
+buttons.eightButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(8);
+    domOperations.appendNum('8');
+    lastInput = 'eight';
+});
+buttons.nineButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(9);
+    domOperations.appendNum('9');
+    lastInput = 'nine';
+});
+buttons.zeroButton.addEventListener('click', () => {
+    if (newOperation === true) {
+        domOperations.setScreenText('');
+        newOperation = false;
+    }
+    domOperations.appendScreenText(0);
+    domOperations.appendNum('0');
+    lastInput = 'zero';
+});
+buttons.additionButton.addEventListener('click', () => {
     domOperations.addition();
 });
-dom.subtractionButton.addEventListener('click', () => {
+buttons.subtractionButton.addEventListener('click', () => {
     domOperations.subtraction();
 });
-dom.multiplicationButton.addEventListener('click', () => {
+buttons.multiplicationButton.addEventListener('click', () => {
     domOperations.multiplication();
 });
-dom.divisionButton.addEventListener('click', () => {
+buttons.divisionButton.addEventListener('click', () => {
     domOperations.division();
 });
-dom.equalityButton.addEventListener('click', () => {
+buttons.equalityButton.addEventListener('click', () => {
     domOperations.equality();
 });
-dom.operateButton.addEventListener('click', () => {
-    newOperation = true;
-    lastInput = 'operate';
+buttons.clearButton.addEventListener('click', () => {
+    domOperations.clearScreen();
 });
-dom.clearButton.addEventListener('click', () => {
-    dom.setScreenText('');
-    currentValue = 0;
-    lastInput = 'clear';
+buttons.allClearButton.addEventListener('click', () => {
+    domOperations.resetAll();
 });
-dom.allClearButton.addEventListener('click', () => {
-    dom.setScreenText('');
-    operationsCount = 0;
-    currentTotal = 0;
-    currentOperation = '';
-    lockedValue = 0; 
-    currentValue = 0;
-    lastInput = 'all clear';
-    lastOperation = '';
-});
-dom.decimalButton.addEventListener('click', () => {
-    if(dom.screenValue.textContent.includes(".")) {
-        return;
-    } else {
-        dom.appendScreenText('.');
-        appendNum('.');
-    }
-    lastInput = 'decimal';
+buttons.decimalButton.addEventListener('click', () => {
+    domOperations.appendDecimal();
 });
 
-// function setNum(num) {
-//     if (operationsCount === 0) {
-//         lockedValue = num;
-//     } else {
-//         currentValue = num;
-//     } 
-// }
-
-function appendNum(num) {
-    currentValue += num; 
-    if (num !== '.') {
-        lockedValue = parseFloat(lockedValue);
-        currentValue = parseFloat(currentValue);
-    }
-}
-
-function displayCurrentTotal() {
-    if (operationsCount >= 1) {
-        dom.setScreenText(currentTotal);
-    } else {
-        return;
-    }
-}
-
-function lockCurrentValue() {
-    lockedValue = currentValue;
-    currentValue = 0;
-}
-
-function lockCurrentTotal() {
-    lockedValue = currentTotal;
-    currentValue = 0;
-}
 
 
 
