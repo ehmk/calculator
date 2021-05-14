@@ -279,7 +279,13 @@ const domOperations = {
             lockCurrentTotal()
             displayCurrentTotal();
             operationsCount++;
-        } else {
+        } else if (operationsCount === 0) {
+            lockCurrentValue();
+            operationsCount++;
+            lastOperation = 'division';
+            return;
+        } 
+        else {
             lockCurrentValue();
             currentTotal = lowLevelOperations.operate('division', lockedValue, currentValue);
             displayCurrentTotal();
