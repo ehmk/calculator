@@ -1,3 +1,12 @@
+let operationsCount = 0;
+let newOperation = false;
+let currentOperation;
+let lastInput;
+let lastOperation;
+let currentTotal = 0;
+let lockedValue = 0;
+let currentValue = 0;
+
 const dom = {
     oneButton: document.querySelector('#one-button'),
     twoButton: document.querySelector('#two-button'),
@@ -32,7 +41,7 @@ const dom = {
     },
 };
 
-const operations = {
+const lowLevelOperations = {
     add: function(a, b) {
         return a + b;
     },
@@ -46,13 +55,13 @@ const operations = {
         return a / b;
     },
     operate: function(operation, a, b) {
-        if(operation === 'add') {
+        if(operation === 'addition') {
             return this.add(a, b);
-        } else if (operation === 'subtract') {
+        } else if (operation === 'subtraction') {
             return this.subtract(a, b);
-        } else if (operation === 'multiply') {
+        } else if (operation === 'multiplication') {
             return this.multiply(a, b);
-        } else if (operation === 'divide') {
+        } else if (operation === 'division') {
             return this.divide(a, b);
         } else {
             return 'ERROR: Something went wrong.';
@@ -66,6 +75,7 @@ dom.oneButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(1);
+    appendNum('1');
     lastInput = 'one';
 });
 dom.twoButton.addEventListener('click', () => {
@@ -74,6 +84,7 @@ dom.twoButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(2);
+    appendNum('2');
     lastInput = 'two';
 });
 dom.threeButton.addEventListener('click', () => {
@@ -82,6 +93,7 @@ dom.threeButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(3);
+    appendNum('3');
     lastInput = 'three';
 });
 dom.fourButton.addEventListener('click', () => {
@@ -90,6 +102,7 @@ dom.fourButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(4);
+    appendNum('4');
     lastInput = 'four';
 });
 dom.fiveButton.addEventListener('click', () => {
@@ -98,6 +111,7 @@ dom.fiveButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(5);
+    appendNum('5');
     lastInput = 'five';
 });
 dom.sixButton.addEventListener('click', () => {
@@ -106,6 +120,7 @@ dom.sixButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(6);
+    appendNum('6');
     lastInput = 'six';
 });
 dom.sevenButton.addEventListener('click', () => {
@@ -114,6 +129,7 @@ dom.sevenButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(7);
+    appendNum('7');
     lastInput = 'seven';
 });
 dom.eightButton.addEventListener('click', () => {
@@ -122,6 +138,7 @@ dom.eightButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(8);
+    appendNum('8');
     lastInput = 'eight';
 });
 dom.nineButton.addEventListener('click', () => {
@@ -130,6 +147,7 @@ dom.nineButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(9);
+    appendNum('9');
     lastInput = 'nine';
 });
 dom.zeroButton.addEventListener('click', () => {
@@ -138,55 +156,85 @@ dom.zeroButton.addEventListener('click', () => {
         newOperation = false;
     }
     dom.appendScreenText(0);
+    appendNum('0');
     lastInput = 'zero';
 });
 
-dom.additionButton.addEventListener('click', () => {
-    if (lastInput === 'plus') {
-        return;
-    } else {
-        currentOperation = 'add';
+
+const domOperations = {
+    addition: function() {
         newOperation = true;
-        setNum(dom.getScreenValue());
-        currentTotal = operations.operate(currentOperation, firstNum, secondNum);
-        firstNum = currentTotal;
-        operationsCount++;
-    }
-    lastInput = 'plus';
+        currentOperation = 'addition';
+        if (lastInput === 'equality') {
+            return;
+        } else if (lastInput === 'addition') {
+            return;
+        } else if (currentOperation === lastOperation) {
+            lockedValue = currentTotal;
+            currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
+            lockCurrentValue();
+            displayCurrentTotal();
+            operationsCount++;
+        } else {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        }
+        lastInput = 'addition';
+        lastOperation = 'addition';
+    },
+    subtraction: function() {
+        newOperation = true;
+        currentOperation = 'subtraction';
+        if (lastInput === 'equality') {
+            return;
+        } else if (lastInput === 'subtraction') {
+            return;
+        } else if (currentOperation === lastOperation) {
+            lockedValue = currentTotal;
+            currentTotal = lowLevelOperations.operate('subtraction', lockedValue, currentValue);
+            lockCurrentValue();
+            displayCurrentTotal();
+            operationsCount++;
+        } else {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('subtraction', lockedValue, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        }
+        lastInput = 'subtraction';
+        lastOperation = 'subtraction';
+    },
+    equality: function() {
+        if (lastInput === 'equals') {
+            return;
+        } else {
+            newOperation = true;
+            currentTotal = lowLevelOperations.operate(lastOperation, currentTotal, currentValue);
+            lockedValue = currentTotal;
+            displayCurrentTotal();
+            operationsCount++;
+        }
+        lastInput = 'equals';
+        lastOperation = 'equality';
+    },
+}; 
+
+dom.additionButton.addEventListener('click', () => {
+    domOperations.addition();
 });
 dom.subtractionButton.addEventListener('click', () => {
-    currentOperation = 'subtract';
-    newOperation = true;
-    setNum(dom.getScreenValue());
-    operationsCount++;
-    lastInput = 'minus';
+    domOperations.subtraction();
 });
 dom.multiplicationButton.addEventListener('click', () => {
-    currentOperation = 'multiply';
-    newOperation = true;
-    setNum(dom.getScreenValue());
-    operationsCount++;
-    lastInput = 'multiply';
+    calculate(lastInput, 'multiply', 'multiply');
 });
 dom.divisionButton.addEventListener('click', () => {
-    currentOperation = 'divide';
-    newOperation = true;
-    setNum(dom.getScreenValue());
-    operationsCount++;
-    lastInput = 'divide';
+    calculate(lastInput, 'divide', 'divide');
 });
 dom.equalityButton.addEventListener('click', () => {
-    if (lastInput === 'equals') {
-        return;
-    } else {
-        newOperation = true;
-        setNum(dom.getScreenValue());
-        currentTotal = operations.operate(currentOperation, firstNum, secondNum);
-        firstNum = currentTotal;
-        operationsCount++;
-        dom.setScreenText(currentTotal);
-    }
-    lastInput = 'equals';
+    domOperations.equality();
 });
 dom.operateButton.addEventListener('click', () => {
     newOperation = true;
@@ -194,41 +242,43 @@ dom.operateButton.addEventListener('click', () => {
 });
 dom.clearButton.addEventListener('click', () => {
     dom.setScreenText('');
+    currentValue = 0;
     lastInput = 'clear';
 });
 dom.allClearButton.addEventListener('click', () => {
     dom.setScreenText('');
     operationsCount = 0;
     currentTotal = 0;
-    firstNum = 0;
-    secondNum = 0;
+    currentOperation = '';
+    lockedValue = 0; 
+    currentValue = 0;
     lastInput = 'all clear';
+    lastOperation = '';
 });
 dom.decimalButton.addEventListener('click', () => {
     if(dom.screenValue.textContent.includes(".")) {
         return;
     } else {
         dom.appendScreenText('.');
+        appendNum('.');
     }
     lastInput = 'decimal';
 });
 
-let operationsCount = 0;
-let newOperation = false;
-let currentOperation = '';
-let lastInput = '';
-let currentTotal = 0;
-let firstNum = 0;
-let secondNum = 0;
+// function setNum(num) {
+//     if (operationsCount === 0) {
+//         lockedValue = num;
+//     } else {
+//         currentValue = num;
+//     } 
+// }
 
-let functionButtons = [dom.additionButton, dom.subtractionButton, dom.multiplicationButton, dom.divisionButton, dom.equalityButton, dom.operateButton, dom.clearButton, dom.decimalButton, dom.allClearButton];
-
-function setNum(num) {
-    if (operationsCount === 0) {
-        firstNum = num;
-    } else {
-        secondNum = num;
-    } 
+function appendNum(num) {
+    currentValue += num; 
+    if (num !== '.') {
+        lockedValue = parseFloat(lockedValue);
+        currentValue = parseFloat(currentValue);
+    }
 }
 
 function displayCurrentTotal() {
@@ -239,17 +289,11 @@ function displayCurrentTotal() {
     }
 }
 
-function disableFunctionButtons() {
-    for (let i = 0; i < functionButtons.length; i++) {
-        functionButtons[i].disabled = true;
-    }
+function lockCurrentValue() {
+    lockedValue = currentValue;
+    currentValue = 0;
 }
 
-function enableFunctionButtons() {
-    for (let i = 0; i < functionButtons.length; i++) {
-        functionButtons[i].disabled = false;
-    }
-}
 
 
 

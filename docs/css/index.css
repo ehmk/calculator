@@ -48,8 +48,6 @@ button:hover {
     display: grid;
     margin: 10px;
     grid-template-columns: 1fr 1fr;
-    border-style: solid;
-    border-color: white;
 }
 
 .number-buttons {
