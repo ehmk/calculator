@@ -180,6 +180,12 @@ const domOperations = {
             currentTotal = lowLevelOperations.operate('addition', currentTotal, currentValue);
             displayCurrentTotal();
             operationsCount++;
+        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
+            lockedValue = currentTotal;
+            currentValue = 0;
+            displayCurrentTotal();
+            operationsCount++;
         } else {
             lockCurrentValue();
             currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
@@ -200,6 +206,17 @@ const domOperations = {
             lockedValue = currentTotal;
             currentTotal = lowLevelOperations.operate('subtraction', lockedValue, currentValue);
             lockCurrentValue();
+            displayCurrentTotal();
+            operationsCount++;
+        } else if (lastOperation === 'equality') {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('subtraction', currentTotal, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
+            lockedValue = currentTotal;
+            currentValue = 0;
             displayCurrentTotal();
             operationsCount++;
         } else {
