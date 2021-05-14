@@ -175,6 +175,11 @@ const domOperations = {
             lockCurrentValue();
             displayCurrentTotal();
             operationsCount++;
+        } else if (lastOperation === 'equality') {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('addition', currentTotal, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
         } else {
             lockCurrentValue();
             currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
