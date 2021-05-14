@@ -234,9 +234,8 @@ const domOperations = {
         } else if (lastInput === 'multiplication') {
             return;
         } else if (currentOperation === lastOperation) {
-            lockedValue = currentTotal;
             currentTotal = lowLevelOperations.operate('multiplication', lockedValue, currentValue);
-            lockCurrentValue();
+            lockCurrentTotal()
             displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
@@ -257,6 +256,37 @@ const domOperations = {
         }
         lastInput = 'multiplication';
         lastOperation = 'multiplication';
+    },
+    division: function() {
+        newOperation = true;
+        currentOperation = 'division';
+        if (lastInput === 'equality') {
+            return;
+        } else if (lastInput === 'division') {
+            return;
+        } else if (currentOperation === lastOperation) {
+            currentTotal = lowLevelOperations.operate('division', lockedValue, currentValue);
+            lockCurrentTotal()
+            displayCurrentTotal();
+            operationsCount++;
+        } else if (lastOperation === 'equality') {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('division', currentTotal, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
+            lockCurrentTotal()
+            displayCurrentTotal();
+            operationsCount++;
+        } else {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('division', lockedValue, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        }
+        lastInput = 'division';
+        lastOperation = 'division';
     },
     equality: function() {
         if (lastInput === 'equals') {
@@ -283,7 +313,7 @@ dom.multiplicationButton.addEventListener('click', () => {
     domOperations.multiplication();
 });
 dom.divisionButton.addEventListener('click', () => {
-    calculate(lastInput, 'divide', 'divide');
+    domOperations.division();
 });
 dom.equalityButton.addEventListener('click', () => {
     domOperations.equality();
