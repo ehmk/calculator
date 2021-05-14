@@ -170,9 +170,8 @@ const domOperations = {
         } else if (lastInput === 'addition') {
             return;
         } else if (currentOperation === lastOperation) {
-            lockedValue = currentTotal;
             currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
-            lockCurrentValue();
+            lockCurrentTotal()
             displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
@@ -189,6 +188,7 @@ const domOperations = {
         } else {
             lockCurrentValue();
             currentTotal = lowLevelOperations.operate('addition', lockedValue, currentValue);
+            lockCurrentTotal();
             displayCurrentTotal();
             operationsCount++;
         }
@@ -203,9 +203,8 @@ const domOperations = {
         } else if (lastInput === 'subtraction') {
             return;
         } else if (currentOperation === lastOperation) {
-            lockedValue = currentTotal;
             currentTotal = lowLevelOperations.operate('subtraction', lockedValue, currentValue);
-            lockCurrentValue();
+            lockCurrentTotal()
             displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
@@ -215,8 +214,7 @@ const domOperations = {
             operationsCount++;
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
-            lockedValue = currentTotal;
-            currentValue = 0;
+            lockCurrentTotal();
             displayCurrentTotal();
             operationsCount++;
         } else {
@@ -228,12 +226,44 @@ const domOperations = {
         lastInput = 'subtraction';
         lastOperation = 'subtraction';
     },
+    multiplication: function() {
+        newOperation = true;
+        currentOperation = 'multiplication';
+        if (lastInput === 'equality') {
+            return;
+        } else if (lastInput === 'multiplication') {
+            return;
+        } else if (currentOperation === lastOperation) {
+            lockedValue = currentTotal;
+            currentTotal = lowLevelOperations.operate('multiplication', lockedValue, currentValue);
+            lockCurrentValue();
+            displayCurrentTotal();
+            operationsCount++;
+        } else if (lastOperation === 'equality') {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('multiplication', currentTotal, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
+            lockCurrentTotal()
+            displayCurrentTotal();
+            operationsCount++;
+        } else {
+            lockCurrentValue();
+            currentTotal = lowLevelOperations.operate('multiplication', lockedValue, currentValue);
+            displayCurrentTotal();
+            operationsCount++;
+        }
+        lastInput = 'multiplication';
+        lastOperation = 'multiplication';
+    },
     equality: function() {
         if (lastInput === 'equals') {
             return;
         } else {
             newOperation = true;
-            currentTotal = lowLevelOperations.operate(lastOperation, currentTotal, currentValue);
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             lockedValue = currentTotal;
             displayCurrentTotal();
             operationsCount++;
@@ -250,7 +280,7 @@ dom.subtractionButton.addEventListener('click', () => {
     domOperations.subtraction();
 });
 dom.multiplicationButton.addEventListener('click', () => {
-    calculate(lastInput, 'multiply', 'multiply');
+    domOperations.multiplication();
 });
 dom.divisionButton.addEventListener('click', () => {
     calculate(lastInput, 'divide', 'divide');
@@ -313,6 +343,11 @@ function displayCurrentTotal() {
 
 function lockCurrentValue() {
     lockedValue = currentValue;
+    currentValue = 0;
+}
+
+function lockCurrentTotal() {
+    lockedValue = currentTotal;
     currentValue = 0;
 }
 
