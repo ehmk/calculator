@@ -72,7 +72,6 @@ const domOperations = {
             this.displayCurrentTotal();
             operationsCount++;
         } else if (lastOperation === 'equality') {
-            this.lockCurrentValue();
             currentTotal = lowLevelOperations.operate('addition', currentTotal, currentValue);
             this.displayCurrentTotal();
             operationsCount++;
