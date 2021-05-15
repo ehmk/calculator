@@ -4,8 +4,9 @@ let currentOperation;
 let lastInput;
 let lastOperation;
 let currentTotal = 0;
-let lockedValue = 0;
-let currentValue = 0;
+let lockedValue;
+let currentValue;
+let lockNegative = false;
 
 const buttons = {
     oneButton: document.querySelector('#one-button'),
@@ -18,7 +19,6 @@ const buttons = {
     eightButton: document.querySelector('#eight-button'),
     nineButton: document.querySelector('#nine-button'),
     zeroButton: document.querySelector('#zero-button'),
-    
     additionButton: document.querySelector('#addition-button'),
     subtractionButton: document.querySelector('#subtraction-button'),
     multiplicationButton: document.querySelector('#multiplication-button'),
@@ -30,177 +30,6 @@ const buttons = {
     allClearButton: document.querySelector('#all-clear-button'),
     negativeButton: document.querySelector('#negative-button'),
 };
-
-const lowLevelOperations = {
-    add: function(a, b) {
-        return a + b;
-    },
-    subtract: function(a, b) {
-        return a - b;
-    },
-    multiply: function(a, b) {
-        return a * b;
-    },
-    divide: function(a, b) {
-        return a / b;
-    },
-    operate: function(operation, a, b) {
-        if(operation === 'addition') {
-            return this.add(a, b);
-        } else if (operation === 'subtraction') {
-            return this.subtract(a, b);
-        } else if (operation === 'multiplication') {
-            return this.multiply(a, b);
-        } else if (operation === 'division') {
-            return this.divide(a, b);
-        } else {
-            return 'ERROR: Something went wrong.';
-        }
-    },
-};
-
-const domOperations = {
-    operate: function(operation) { // operation: addition, subtraction, multiplication, division
-        newOperation = true;
-        currentOperation = operation;
-        if (lastInput === operation) {
-            return;
-        }
-        
-        if (lastOperation === 'equality') {
-            this.lockCurrentTotal();
-            lastOperation = operation;
-            operationsCount++;
-            return;
-        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
-            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
-            this.lockCurrentTotal();
-            this.displayCurrentTotal();
-            operationsCount++;
-        } else if (operationsCount >= 1) {
-            currentTotal = lowLevelOperations.operate(operation, lockedValue, currentValue);
-            this.lockCurrentTotal();
-            this.displayCurrentTotal();
-            operationsCount++;
-        } else {
-            this.lockCurrentValue();
-            operationsCount++;
-        }
-        lastInput = operation;
-        lastOperation = operation;
-    },
-    equality: function() {
-        newOperation = true;
-        currentOperation = 'equality';
-        if (lastInput === 'equality') {
-            return;
-        } else {
-            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
-            this.lockCurrentTotal();
-            this.displayCurrentTotal();
-            operationsCount++;
-        }
-        lastOperation = 'equality';
-        lastInput = 'equality';
-    },
-    appendNum: function(num) {
-        if (num === '-') {
-            currentValue = '-';
-            return;
-        }
-        currentValue += num; 
-        if (num !== '.') {
-            lockedValue = parseFloat(lockedValue);
-            currentValue = parseFloat(currentValue);
-        }
-    },
-    displayCurrentTotal: function() {
-        if (operationsCount >= 1) {
-            domOperations.setScreenText(currentTotal);
-        } else {
-            return;
-        }
-    },
-    lockCurrentValue: function() {
-        lockedValue = currentValue;
-        currentValue = 0;
-    },
-    lockCurrentTotal: function() {
-        lockedValue = currentTotal;
-        currentValue = 0;
-    },
-    clearValues: function() {
-        lockedValue = 0;
-        currentValue = 0;
-    },
-    resetAll: function() {
-        domOperations.setScreenText('');
-        operationsCount = 0;
-        currentTotal = 0;
-        currentOperation = '';
-        lockedValue = 0; 
-        currentValue = 0;
-        lastInput = 'all clear';
-        lastOperation = '';
-        newOperation = false;
-    },
-    clearScreen: function() {
-        domOperations.setScreenText('');
-        currentValue = 0;
-        lastInput = 'clear';
-    },
-    appendDecimal: function() {
-        if(this.screenValue.textContent.includes(".") || newOperation === true) {
-            return;
-        } else {
-            domOperations.appendScreenText('.');
-            this.appendNum('.');
-        }
-        lastInput = 'decimal';
-    },
-    toggleNegative: function() {
-        if (lastInput === 'equality') {
-            if (lockedValue < 0) {
-                lockedValue = Math.abs(lockedValue);
-                currentTotal = lockedValue;
-                domOperations.setScreenText(lockedValue);
-                return;
-            } else {
-                lockedValue = -Math.abs(lockedValue);
-                currentTotal = lockedValue;
-                domOperations.setScreenText(lockedValue);
-                return;
-            }
-        }
-
-        if (currentValue < 0) {
-            currentValue = Math.abs(currentValue);
-            domOperations.setScreenText(currentValue);
-        } else {
-            currentValue = -Math.abs(currentValue);
-            domOperations.setScreenText(currentValue);
-        }
-        lastInput = 'negativeToggle';
-    },
-    appendScreenText: function(a) {
-        this.screenValue.textContent += a;
-    },
-    setScreenText: function(a) {
-        this.screenValue.textContent = a;
-    },
-    screenValue: document.querySelector('#screen-value'),
-    press: function(num, numString) {
-        if (newOperation === true) {
-            domOperations.setScreenText('');
-            newOperation = false;
-        }
-        domOperations.appendNum(num);
-        domOperations.setScreenText(currentValue);
-        lastInput = numString;
-    },
-};
-
-
 
 buttons.oneButton.addEventListener('click', () => {
     domOperations.press('1', 'one');
@@ -259,6 +88,201 @@ buttons.decimalButton.addEventListener('click', () => {
 buttons.negativeButton.addEventListener('click', () => {
     domOperations.toggleNegative();
 });
+
+const lowLevelOperations = {
+    add: function(a, b) {
+        return a + b;
+    },
+    subtract: function(a, b) {
+        return a - b;
+    },
+    multiply: function(a, b) {
+        return a * b;
+    },
+    divide: function(a, b) {
+        return a / b;
+    },
+    operate: function(operation, a, b) {
+        if(operation === 'addition') {
+            return this.add(a, b);
+        } else if (operation === 'subtraction') {
+            return this.subtract(a, b);
+        } else if (operation === 'multiplication') {
+            return this.multiply(a, b);
+        } else if (operation === 'division') {
+            return this.divide(a, b);
+        } else {
+            return 'ERROR: Something went wrong.';
+        }
+    },
+};
+
+const domOperations = {
+    operate: function(operation) { // operation: addition, subtraction, multiplication, division
+        newOperation = true;
+        currentOperation = operation;
+        if (lastInput === operation) {
+            return;
+        }
+        
+        if (lastOperation === 'equality') {
+            this.lockCurrentTotal();
+            lastOperation = operation;
+            operationsCount++;
+            return;
+        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
+            this.lockCurrentTotal();
+            this.displayCurrentTotal();
+            operationsCount++;
+        } else if (operationsCount >= 1) {
+            currentTotal = lowLevelOperations.operate(operation, lockedValue, currentValue);
+            this.lockCurrentTotal();
+            this.displayCurrentTotal();
+            operationsCount++;
+        } else {
+            this.lockCurrentValue();
+            operationsCount++;
+        }
+        lastInput = operation;
+        lastOperation = operation;
+        lockNegative = false;
+    },
+    equality: function() {
+        newOperation = true;
+        currentOperation = 'equality';
+        if (lastInput === 'equality') {
+            return;
+        } else if (operationsCount < 1) {
+            return;
+        } else {
+            currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
+            this.lockCurrentTotal();
+            this.displayCurrentTotal();
+            operationsCount++;
+        }
+        lastOperation = 'equality';
+        lastInput = 'equality';
+    },
+    appendNum: function(num) {
+        if (currentValue === undefined) {
+            currentValue = num;
+            return;
+        }
+
+        currentValue += num; 
+        lockedValue = parseFloat(lockedValue);
+        currentValue = parseFloat(currentValue);
+    },
+    displayCurrentTotal: function() {
+        if (operationsCount >= 1) {
+            domOperations.setScreenText(currentTotal);
+        } else {
+            return;
+        }
+    },
+    lockCurrentValue: function() {
+        lockedValue = currentValue;
+        currentValue = 0;
+    },
+    lockCurrentTotal: function() {
+        lockedValue = currentTotal;
+        currentValue = 0;
+    },
+    clearValues: function() {
+        lockedValue = undefined;
+        currentValue = undefined;
+    },
+    resetAll: function() {
+        domOperations.setScreenText('');
+        operationsCount = 0;
+        currentTotal = 0;
+        currentOperation = '';
+        lockedValue = undefined; 
+        currentValue = undefined;
+        lastInput = 'all clear';
+        lastOperation = '';
+        newOperation = false;
+        lockNegative = false;
+    },
+    clearScreen: function() {
+        domOperations.setScreenText('');
+        currentValue = undefined;
+        lastInput = 'clear';
+    },
+    appendDecimal: function() {
+        if(this.screenValue.textContent.includes(".") || newOperation === true) {
+            return;
+        } else {
+            domOperations.appendScreenText('.');
+            this.appendNum('.');
+        }
+        lastInput = 'decimal';
+    },
+    toggleNegative: function() {
+        if (lockNegative === false && currentValue === undefined) {
+            domOperations.screenValue.textContent = '-';
+            lockNegative = true;
+            return;
+        } else if (lockNegative === true && currentValue === undefined) {
+            domOperations.screenValue.textContent = '';
+            lockNegative = false;
+            return;
+        }
+
+        if (lockNegative === true) {
+            lockNegative = false;
+        } else if (lockNegative === false) {
+            lockNegative = true;
+        }
+
+        
+
+        if (lockNegative === true) {
+            currentValue = -Math.abs(currentValue);
+            domOperations.setScreenText(currentValue);
+            return;
+        } else if (lockNegative === false) {
+            currentValue = Math.abs(currentValue);
+            domOperations.setScreenText(currentValue);
+            return;
+        }
+    },
+    convertNumber(num) {
+        if (num > 0) {
+            return -Math.abs(num);
+        } else if (num < 0) {
+            return Math.abs(num);
+        }
+    },
+    appendScreenText: function(a) {
+        this.screenValue.textContent += a;
+    },
+    setScreenText: function(a) {
+        this.screenValue.textContent = a;
+    },
+    screenValue: document.querySelector('#screen-value'),
+    press: function(num, numString) {
+        if (newOperation === true) {
+            domOperations.setScreenText('');
+            newOperation = false;
+        }
+        this.appendNum(num);
+        domOperations.setScreenText(currentValue);
+
+        if (lockNegative === true) {
+            currentValue = -Math.abs(currentValue);
+            domOperations.setScreenText(currentValue);
+            return;
+        } else if (lockNegative === false) {
+            currentValue = Math.abs(currentValue);
+            domOperations.setScreenText(currentValue);
+            return;
+        }
+    },
+};
+
+
 
 
 
