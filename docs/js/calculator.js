@@ -220,6 +220,7 @@ const domOperations = {
         lastInput = 'decimal';
     },
     toggleNegative: function() {
+        lastInput = 'toggleNegative';
         if (lockNegative === false && currentValue === undefined) {
             domOperations.screenValue.textContent = '-';
             lockNegative = true;
@@ -236,7 +237,11 @@ const domOperations = {
             lockNegative = true;
         }
 
-        
+        if (newOperation === true) {
+            currentTotal = this.operate(lastOperation, lockedValue, currentValue);
+            this.lockCurrentTotal;
+            return;
+        }
 
         if (lockNegative === true) {
             currentValue = -Math.abs(currentValue);
@@ -269,6 +274,7 @@ const domOperations = {
         }
         this.appendNum(num);
         domOperations.setScreenText(currentValue);
+        lastInput = numString;
 
         if (lockNegative === true) {
             currentValue = -Math.abs(currentValue);
