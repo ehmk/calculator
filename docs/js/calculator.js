@@ -70,10 +70,19 @@ const domOperations = {
             operationsCount = 0;
             currentValue = lockedValue;
             lockedValue = 0;
-        }
-        if (lastInput === 'addition') {
+        } else if (lastInput === 'addition') {
             return;
-        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+        } 
+        
+        if (lastInput === 'equality') {
+            if (lastOperation === 'equality') {
+                this.lockCurrentTotal();
+                operationsCount++;
+                lastOperation = 'addition';
+                return;
+            } 
+        } 
+        else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             this.lockCurrentTotal();
             this.displayCurrentTotal();
@@ -97,9 +106,17 @@ const domOperations = {
             operationsCount = 0;
             currentValue = lockedValue;
             lockedValue = 0;
-        }
-        if (lastInput === 'subtraction') {
+        } else if (lastInput === 'subtraction') {
             return;
+        } 
+        
+        if (lastInput === 'equality') {
+            if (lastOperation === 'equality') {
+                this.lockCurrentTotal();
+                operationsCount++;
+                lastOperation = 'subtraction';
+                return;
+            } 
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             this.lockCurrentTotal();
@@ -124,12 +141,17 @@ const domOperations = {
             operationsCount = 0;
             currentValue = lockedValue;
             lockedValue = 0;
-        }
-        if (lastInput === 'equality') {
-            currentValue = 1;
-        }
-        if (lastInput === 'multiplication') {
+        } else if (lastInput === 'multiplication') {
             return;
+        } 
+        
+        if (lastInput === 'equality') {
+            if (lastOperation === 'equality') {
+                this.lockCurrentTotal();
+                operationsCount++;
+                lastOperation = 'multiplication';
+                return;
+            } 
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             this.lockCurrentTotal();
@@ -154,11 +176,14 @@ const domOperations = {
             operationsCount = 0;
             currentValue = lockedValue;
             lockedValue = 0;
-        }
-        if (lastInput === 'equality') {
-            currentValue = 1;
-        }
-        if (lastInput === 'division') {
+        } else if (lastInput === 'division') {
+            return;
+        } 
+        
+        if (lastOperation === 'equality') {
+            this.lockCurrentTotal();
+            operationsCount++;
+            lastOperation = 'division';
             return;
         } else if (currentOperation !== lastOperation && operationsCount >= 1) {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
@@ -179,6 +204,7 @@ const domOperations = {
     },
     equality: function() {
         newOperation = true;
+        currentOperation = 'equality';
         if (lastInput === 'equality') {
             return;
         } else {
@@ -187,7 +213,7 @@ const domOperations = {
             this.displayCurrentTotal();
             operationsCount++;
         }
-        lastOperation = currentOperation;
+        lastOperation = 'equality';
         lastInput = 'equality';
     },
     appendNum: function(num) {
