@@ -183,11 +183,11 @@ const domOperations = {
     },
     lockCurrentValue: function() {
         lockedValue = currentValue;
-        currentValue = 0;
+        currentValue = undefined;
     },
     lockCurrentTotal: function() {
         lockedValue = currentTotal;
-        currentValue = 0;
+        currentValue = undefined;
     },
     clearValues: function() {
         lockedValue = undefined;
