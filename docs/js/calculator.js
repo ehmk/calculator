@@ -121,6 +121,8 @@ const domOperations = {
     operate: function(operation) { // operation: addition, subtraction, multiplication, division
         newOperation = true;
         currentOperation = operation;
+        currentValue = parseFloat(currentValue);
+        lockedValue = parseFloat(lockedValue);
         if (lastInput === operation) {
             return;
         }
@@ -170,9 +172,7 @@ const domOperations = {
             return;
         }
 
-        currentValue += num; 
-        lockedValue = parseFloat(lockedValue);
-        currentValue = parseFloat(currentValue);
+        currentValue += num;
     },
     displayCurrentTotal: function() {
         if (operationsCount >= 1) {
@@ -211,35 +211,39 @@ const domOperations = {
         lastInput = 'clear';
     },
     appendDecimal: function() {
-        if(this.screenValue.textContent.includes(".") || newOperation === true) {
+        if (lastInput === 'equality') {
+            currentValue = '0.';
+            domOperations.setScreenText(currentValue);
+            return;
+        }
+        if (currentValue === undefined) {
+            currentValue = '-';
+            domOperations.setScreenText(currentValue);
+            return;
+        }
+        if(currentValue % 1 !== 0 && currentValue !== '-') {
             return;
         } else {
-            domOperations.appendScreenText('.');
-            this.appendNum('.');
+            domOperations.appendScreenText('.0');
+            currentValue = String(currentValue);
+            currentValue += '.';
         }
         lastInput = 'decimal';
     },
     toggleNegative: function() {
-        lastInput = 'toggleNegative';
-        if (lockNegative === false && currentValue === undefined) {
-            domOperations.screenValue.textContent = '-';
-            lockNegative = true;
-            return;
-        } else if (lockNegative === true && currentValue === undefined) {
-            domOperations.screenValue.textContent = '';
-            lockNegative = false;
-            return;
-        }
-
         if (lockNegative === true) {
             lockNegative = false;
         } else if (lockNegative === false) {
             lockNegative = true;
         }
-
-        if (newOperation === true) {
-            currentTotal = this.operate(lastOperation, lockedValue, currentValue);
-            this.lockCurrentTotal;
+        if (lastInput === 'equality') {
+            currentValue = '-';
+            domOperations.setScreenText(currentValue);
+            return;
+        }
+        if (currentValue === undefined) {
+            currentValue = '-';
+            domOperations.setScreenText(currentValue);
             return;
         }
 
