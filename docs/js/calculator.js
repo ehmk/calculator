@@ -178,7 +178,7 @@ const domOperations = {
     },
     displayCurrentTotal: function() {
         if (operationsCount >= 1) {
-            domOperations.setScreenText(currentTotal);
+            domOperations.setScreenText(currentTotal.toFixed(4));
         } else {
             return;
         }
