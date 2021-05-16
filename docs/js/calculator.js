@@ -178,7 +178,11 @@ const domOperations = {
     },
     displayCurrentTotal: function() {
         if (operationsCount >= 1) {
-            domOperations.setScreenText(currentTotal.toFixed(4));
+            if (currentTotal % 1 === 0) {
+                domOperations.setScreenText(currentTotal); 
+            } else {
+                domOperations.setScreenText(currentTotal.toFixed(4));
+            }
         } else {
             return;
         }
