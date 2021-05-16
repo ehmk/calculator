@@ -153,6 +153,8 @@ const domOperations = {
     equality: function() {
         newOperation = true;
         currentOperation = 'equality';
+        currentValue = parseFloat(currentValue);
+        lockedValue = parseFloat(lockedValue);
         if (lastInput === 'equality') {
             return;
         } else if (operationsCount < 1) {
@@ -273,22 +275,24 @@ const domOperations = {
     screenValue: document.querySelector('#screen-value'),
     press: function(num, numString) {
         if (newOperation === true) {
-            domOperations.setScreenText('');
             newOperation = false;
         }
-        this.appendNum(num);
+        if (currentValue === undefined) {
+            currentValue = '';        
+        }
+        currentValue += num;
         domOperations.setScreenText(currentValue);
         lastInput = numString;
 
-        if (lockNegative === true) {
-            currentValue = -Math.abs(currentValue);
-            domOperations.setScreenText(currentValue);
-            return;
-        } else if (lockNegative === false) {
-            currentValue = Math.abs(currentValue);
-            domOperations.setScreenText(currentValue);
-            return;
-        }
+        // if (lockNegative === true) {
+        //     currentValue = -Math.abs(currentValue);
+        //     domOperations.setScreenText(currentValue);
+        //     return;
+        // } else if (lockNegative === false) {
+        //     currentValue = Math.abs(currentValue);
+        //     domOperations.setScreenText(currentValue);
+        //     return;
+        // }
     },
 };
 
