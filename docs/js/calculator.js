@@ -287,16 +287,6 @@ const domOperations = {
         currentValue += num;
         domOperations.setScreenText(currentValue);
         lastInput = numString;
-
-        // if (lockNegative === true) {
-        //     currentValue = -Math.abs(currentValue);
-        //     domOperations.setScreenText(currentValue);
-        //     return;
-        // } else if (lockNegative === false) {
-        //     currentValue = Math.abs(currentValue);
-        //     domOperations.setScreenText(currentValue);
-        //     return;
-        // }
     },
 };
 
