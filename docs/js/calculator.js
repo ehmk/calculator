@@ -325,6 +325,10 @@ const domOperations = {
         lastInput = 'clear';
     },
     appendDecimal: function() {
+        if (lastOperation === 'equality') {
+            this.resetAll();
+            domOperations.setScreenText('');
+        }
         if (lastInput === 'equality') {
             currentValue = '0.';
             domOperations.setScreenText(currentValue);
@@ -354,6 +358,17 @@ const domOperations = {
         } else if (lockNegative === false) {
             lockNegative = true;
         }
+
+        if (lastInput === 'decimal') {
+            currentValue = '-' + currentValue;
+            domOperations.setScreenText(currentValue);
+            return;
+        }
+        if (operationsCount < 1) {
+            currentValue = '-';
+            domOperations.setScreenText(currentValue);
+            return;
+        }
         if (operations.includes(currentOperation)) {
             currentValue = '-';
             domOperations.setScreenText(currentValue);
@@ -367,11 +382,6 @@ const domOperations = {
             }
             currentTotal = lockedValue;
             domOperations.setScreenText(lockedValue);
-            return;
-        }
-        if (lastInput = 'decimal') {
-            currentValue = '-' + currentValue;
-            domOperations.setScreenText(currentValue);
             return;
         }
         if (lockNegative === true) {
