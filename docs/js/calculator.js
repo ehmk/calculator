@@ -131,7 +131,7 @@ buttons.multiplicationButton.addEventListener('click', event => {
     domOperations.operate('multiplication');
 });
 document.addEventListener('keydown', event => {
-    if (event.shiftKey && event.key === '8') {
+    if (event.keyCode === 219) {
         domOperations.operate('multiplication');
     }
 });
@@ -139,7 +139,7 @@ buttons.divisionButton.addEventListener('click', () => {
     domOperations.operate('division');
 });
 document.addEventListener('keydown', event => {
-    if (event.keyCode === 191) {
+    if (event.keyCode === 221) {
         domOperations.operate('division');
     }
 });
@@ -173,7 +173,11 @@ document.addEventListener('keydown', event => {
 buttons.negativeButton.addEventListener('click', () => {
     domOperations.toggleNegative();
 });
-
+document.addEventListener('keydown', () => {
+    if (event.keyCode === 220) {
+        domOperations.toggleNegative();
+    }
+});
 const lowLevelOperations = {
     add: function(a, b) {
         return a + b;
