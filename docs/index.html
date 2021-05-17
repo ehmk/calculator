@@ -11,34 +11,40 @@
 </head>
 
 <body>
-    <div class='calculator-container'>
-        <div class='screen'>
-            <p id='screen-value'></p>
+    <div id='master-container'>
+        <div class='calculator-container'>
+            <div class='screen'>
+                <p id='screen-value'></p>
+            </div>
+            <div class='buttons'>
+                <div class='number-buttons'>
+                    <button id="one-button">1</button>
+                    <button id="two-button">2</button>
+                    <button id="three-button">3</button>
+                    <button id="four-button">4</button>
+                    <button id="five-button">5</button>
+                    <button id="six-button">6</button>
+                    <button id="seven-button">7</button>
+                    <button id="eight-button">8</button>
+                    <button id="nine-button">9</button>
+                    <button id="zero-button">0</button>
+                </div>
+                <div class='operation-buttons'>
+                    <button id="clear-button">C</button>
+                    <button id="all-clear-button">AC</button>
+                    <button id="addition-button">+</button>
+                    <button id="subtraction-button">-</button>
+                    <button id="multiplication-button">*</button>
+                    <button id="division-button">/</button>
+                    <button id="decimal-button">.</button>
+                    <button id="negative-button">+/-</button>
+                    <button id="equality-button">=</button>
+                </div>
+            </div>
         </div>
-        <div class='buttons'>
-            <div class='number-buttons'>
-                <button id="one-button">1</button>
-                <button id="two-button">2</button>
-                <button id="three-button">3</button>
-                <button id="four-button">4</button>
-                <button id="five-button">5</button>
-                <button id="six-button">6</button>
-                <button id="seven-button">7</button>
-                <button id="eight-button">8</button>
-                <button id="nine-button">9</button>
-                <button id="zero-button">0</button>
-            </div>
-            <div class='operation-buttons'>
-                <button id="clear-button">C</button>
-                <button id="all-clear-button">AC</button>
-                <button id="addition-button">+</button>
-                <button id="subtraction-button">-</button>
-                <button id="multiplication-button">*</button>
-                <button id="division-button">/</button>
-                <button id="decimal-button">.</button>
-                <button id="negative-button">+/-</button>
-                <button id="equality-button">=</button>
-            </div>
+        <div id='operation-history'>
+            <h1>History</h1>
+            <section id='operation-history-list'></section>
         </div>
     </div>
 </body>

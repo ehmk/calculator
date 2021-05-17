@@ -1,3 +1,4 @@
+let firstOperation = true;
 let operationsCount = 0;
 let newOperation = false;
 let currentOperation;
@@ -146,7 +147,7 @@ document.addEventListener('keydown', event => {
 buttons.equalityButton.addEventListener('click', () => {
     domOperations.equality();
 });
-document.addEventListener('keydown', () => {
+document.addEventListener('keydown', event => {
     if (event.keyCode === 13) {
         domOperations.operate('equality');
     }
@@ -173,7 +174,7 @@ document.addEventListener('keydown', event => {
 buttons.negativeButton.addEventListener('click', () => {
     domOperations.toggleNegative();
 });
-document.addEventListener('keydown', () => {
+document.addEventListener('keydown', event => {
     if (event.keyCode === 220) {
         domOperations.toggleNegative();
     }
@@ -218,7 +219,7 @@ const domOperations = {
                 operations.splice(i, 1);
             }
         } 
-
+        
         if (currentValue !== undefined) {
             currentValue = parseFloat(currentValue);
         }
@@ -238,22 +239,25 @@ const domOperations = {
         if (lastOperation === 'equality') {
             this.lockCurrentTotal();
             lastOperation = operation;
-            operationsCount++;
+            firstOperation = false;
             return;
-        } else if (currentOperation !== lastOperation && operationsCount >= 1) {
+        } else if (currentOperation !== lastOperation && firstOperation === false) {
+            appendHistory();
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             this.lockCurrentTotal();
             this.displayCurrentTotal();
-            operationsCount++;
-        } else if (operationsCount >= 1) {
+            firstOperation = false;
+        } else if (firstOperation === false) {
+            appendHistory();
             currentTotal = lowLevelOperations.operate(operation, lockedValue, currentValue);
             this.lockCurrentTotal();
             this.displayCurrentTotal();
-            operationsCount++;
+            firstOperation = false;
         } else {
             this.lockCurrentValue();
-            operationsCount++;
+            firstOperation = false;
         }
+        
         lastInput = operation;
         lastOperation = operation;
         lockNegative = false;
@@ -263,15 +267,16 @@ const domOperations = {
         currentOperation = 'equality';
         currentValue = parseFloat(currentValue);
         lockedValue = parseFloat(lockedValue);
+        appendHistory();
         if (lastInput === 'equality') {
             return;
-        } else if (operationsCount < 1) {
+        } else if (firstOperation === true) {
             return;
         } else {
             currentTotal = lowLevelOperations.operate(lastOperation, lockedValue, currentValue);
             this.lockCurrentTotal();
             this.displayCurrentTotal();
-            operationsCount++;
+            firstOperation = false;
         }
         lastOperation = 'equality';
         lastInput = 'equality';
@@ -285,7 +290,7 @@ const domOperations = {
         currentValue += num;
     },
     displayCurrentTotal: function() {
-        if (operationsCount >= 1) {
+        if (firstOperation === false) {
             if (currentTotal % 1 === 0) {
                 domOperations.setScreenText(currentTotal); 
             } else {
@@ -309,7 +314,7 @@ const domOperations = {
     },
     resetAll: function() {
         domOperations.setScreenText('');
-        operationsCount = 0;
+        firstOperation = true;
         currentTotal = 0;
         currentOperation = '';
         lockedValue = undefined; 
@@ -402,12 +407,12 @@ const domOperations = {
         }
     },
     appendScreenText: function(a) {
-        this.screenValue.textContent += a;
+        dataScreens.screenValue.textContent += a;
     },
     setScreenText: function(a) {
-        this.screenValue.textContent = a;
+        dataScreens.screenValue.textContent = a;
     },
-    screenValue: document.querySelector('#screen-value'),
+    
     press: function(num, numString) {
         if (newOperation === true) {
             newOperation = false;
@@ -420,6 +425,53 @@ const domOperations = {
         lastInput = numString;
     },
 };
+
+const dataScreens = {
+    screenValue: document.querySelector('#screen-value'),
+    history: document.querySelector('#operation-history-list'),
+};
+
+function appendHistory() {
+    let setOperationSymbol;
+    let currentAnswer;
+
+    if (lastOperation === 'addition') {
+        setOperationSymbol = '+';
+        currentAnswer = parseFloat(lockedValue) + parseFloat(currentValue);
+    } else if (lastOperation === 'subtraction') {
+        setOperationSymbol = '-';
+        currentAnswer = parseFloat(lockedValue) - parseFloat(currentValue);
+    } else if (lastOperation === 'multiplication') {
+        setOperationSymbol = '*';
+        currentAnswer = parseFloat(lockedValue) * parseFloat(currentValue);
+    } else if (lastOperation === 'division') {
+        setOperationSymbol = '/';
+        currentAnswer = parseFloat(lockedValue) / parseFloat(currentValue);
+    }
+
+    if (dataScreens.history.childElementCount > 4) {
+        dataScreens.history.removeChild(dataScreens.history.childNodes[0]);
+    }
+
+    if (currentAnswer % 1 === 0) {
+        currentAnswer = parseFloat(currentAnswer);
+    } else {
+        currentAnswer = parseFloat(currentAnswer).toFixed(4);
+    }
+
+    if (currentValue !== undefined && lockedValue !== undefined) {
+        let para = document.createElement('p');
+        para.textContent = `${lockedValue} ${setOperationSymbol} ${currentValue} = ${currentAnswer}`;
+        dataScreens.history.appendChild(para);
+    }
+}
+
+
+
+
+
+
+
 
 
 

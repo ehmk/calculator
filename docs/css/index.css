@@ -15,6 +15,32 @@ button:hover {
     color: aquamarine;
 }
 
+#master-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#operation-history {
+    border-style: solid;
+    border-color: white;
+    color: white;
+    display: grid;
+    padding: 20px;
+    grid-template-columns: 1fr 4fr 1fr;
+}
+
+#operation-history > h1 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    text-align: center;
+}
+
+#operation-history > section {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    text-align: center;
+}
+
 .calculator-container {
     display: grid;
     align-items: center;
