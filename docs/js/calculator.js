@@ -34,47 +34,122 @@ const buttons = {
 buttons.oneButton.addEventListener('click', () => {
     domOperations.press('1', 'one');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 49) {
+        domOperations.press('1', 'one');
+    }
+});
 buttons.twoButton.addEventListener('click', () => {
     domOperations.press('2', 'two');
+});
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 50) {
+        domOperations.press('2', 'two');
+    }
 });
 buttons.threeButton.addEventListener('click', () => {
     domOperations.press('3', 'three');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 51) {
+        domOperations.press('3', 'three');
+    }
+});
 buttons.fourButton.addEventListener('click', () => {
     domOperations.press('4', 'four');
+});
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 52) {
+        domOperations.press('4', 'four');
+    }
 });
 buttons.fiveButton.addEventListener('click', () => {
     domOperations.press('5', 'five');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 53) {
+        domOperations.press('5', 'five');
+    }
+});
 buttons.sixButton.addEventListener('click', () => {
     domOperations.press('6', 'six');
+});
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 54) {
+        domOperations.press('6', 'six');
+    }
 });
 buttons.sevenButton.addEventListener('click', () => {
     domOperations.press('7', 'seven');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 55) {
+        domOperations.press('7', 'seven');
+    }
+});
 buttons.eightButton.addEventListener('click', () => {
     domOperations.press('8', 'eight');
+});
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 56) {
+        domOperations.press('8', 'eight');
+    }
 });
 buttons.nineButton.addEventListener('click', () => {
     domOperations.press('9', 'nine');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 57) {
+        domOperations.press('9', 'nine');
+    }
+});
 buttons.zeroButton.addEventListener('click', () => {
     domOperations.press('0', 'zero');
+});
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 48) {
+        domOperations.press('0', 'zero');
+    }
 });
 buttons.additionButton.addEventListener('click', () => {
     domOperations.operate('addition');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 187) {
+        domOperations.operate('addition');
+    }
+});
 buttons.subtractionButton.addEventListener('click', () => {
     domOperations.operate('subtraction');
 });
-buttons.multiplicationButton.addEventListener('click', () => {
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 189) {
+        domOperations.operate('subtraction');
+    }
+});
+buttons.multiplicationButton.addEventListener('click', event => {
     domOperations.operate('multiplication');
+});
+document.addEventListener('keydown', event => {
+    if (event.shiftKey && event.key === '8') {
+        domOperations.operate('multiplication');
+    }
 });
 buttons.divisionButton.addEventListener('click', () => {
     domOperations.operate('division');
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 191) {
+        domOperations.operate('division');
+    }
+});
 buttons.equalityButton.addEventListener('click', () => {
     domOperations.equality();
+});
+document.addEventListener('keydown', () => {
+    if (event.keyCode === 13) {
+        domOperations.operate('equality');
+    }
 });
 buttons.clearButton.addEventListener('click', () => {
     domOperations.clearScreen();
@@ -82,8 +157,18 @@ buttons.clearButton.addEventListener('click', () => {
 buttons.allClearButton.addEventListener('click', () => {
     domOperations.resetAll();
 });
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 8) {
+        domOperations.resetAll();
+    }
+});
 buttons.decimalButton.addEventListener('click', () => {
     domOperations.appendDecimal();
+});
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 190) {
+        domOperations.appendDecimal();
+    }
 });
 buttons.negativeButton.addEventListener('click', () => {
     domOperations.toggleNegative();
@@ -121,12 +206,15 @@ const domOperations = {
     operate: function(operation) { // operation: addition, subtraction, multiplication, division
         newOperation = true;
         currentOperation = operation;
-        currentValue = parseFloat(currentValue);
-        lockedValue = parseFloat(lockedValue);
+        if (currentValue !== undefined) {
+            currentValue = parseFloat(currentValue);
+        }
+        if (lockedValue !== undefined) {
+            lockedValue = parseFloat(lockedValue);
+        }
         if (lastInput === operation) {
             return;
         }
-        
         if (lastOperation === 'equality') {
             this.lockCurrentTotal();
             lastOperation = operation;
@@ -243,8 +331,13 @@ const domOperations = {
             lockNegative = true;
         }
         if (lastInput === 'equality') {
-            currentValue = '-';
-            domOperations.setScreenText(currentValue);
+            if (lockedValue > 0) {
+                lockedValue = -Math.abs(lockedValue);
+            } else if (lockedValue < 0) {
+                lockedValue = Math.abs(lockedValue);
+            }
+            currentTotal = lockedValue;
+            domOperations.setScreenText(lockedValue);
             return;
         }
         if (currentValue === undefined) {
