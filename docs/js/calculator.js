@@ -202,10 +202,19 @@ const lowLevelOperations = {
     },
 };
 
+
+
 const domOperations = {
     operate: function(operation) { // operation: addition, subtraction, multiplication, division
         newOperation = true;
         currentOperation = operation;
+        let operations = ['addition', 'subtraction', 'multiplication', 'division'];
+        for (let i = 0; i < operations.length; i++) {
+            if (operations[i] === currentOperation) {
+                operations.splice(i, 1);
+            }
+        } 
+
         if (currentValue !== undefined) {
             currentValue = parseFloat(currentValue);
         }
@@ -215,6 +224,13 @@ const domOperations = {
         if (lastInput === operation) {
             return;
         }
+        if (operations.includes(lastInput)) {
+            lastInput = operation;
+            lastOperation = operation;
+            lockNegative = false;
+            return;
+        }
+
         if (lastOperation === 'equality') {
             this.lockCurrentTotal();
             lastOperation = operation;
@@ -308,14 +324,17 @@ const domOperations = {
         if (lastInput === 'equality') {
             currentValue = '0.';
             domOperations.setScreenText(currentValue);
+            lastInput = 'decimal';
             return;
         }
         if (currentValue === undefined) {
-            currentValue = '-';
+            currentValue = '0.';
             domOperations.setScreenText(currentValue);
+            lastInput = 'decimal';
             return;
         }
         if(currentValue % 1 !== 0 && currentValue !== '-') {
+            lastInput = 'decimal';
             return;
         } else {
             domOperations.appendScreenText('.0');
@@ -338,6 +357,11 @@ const domOperations = {
             }
             currentTotal = lockedValue;
             domOperations.setScreenText(lockedValue);
+            return;
+        }
+        if (lastInput = 'decimal') {
+            currentValue = '-' + currentValue;
+            domOperations.setScreenText(currentValue);
             return;
         }
         if (currentValue === undefined) {
