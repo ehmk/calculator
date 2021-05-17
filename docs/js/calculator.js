@@ -364,11 +364,7 @@ const domOperations = {
             domOperations.setScreenText(currentValue);
             return;
         }
-        if (operationsCount < 1) {
-            currentValue = '-';
-            domOperations.setScreenText(currentValue);
-            return;
-        }
+        
         if (operations.includes(currentOperation)) {
             currentValue = '-';
             domOperations.setScreenText(currentValue);
@@ -384,7 +380,11 @@ const domOperations = {
             domOperations.setScreenText(lockedValue);
             return;
         }
-        if (lockNegative === true) {
+        if (currentValue === undefined) {
+            currentValue = '-';
+            domOperations.setScreenText(currentValue);
+            return;
+        } else if (lockNegative === true) {
             currentValue = -Math.abs(currentValue);
             domOperations.setScreenText(currentValue);
             return;
