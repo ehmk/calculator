@@ -348,10 +348,16 @@ const domOperations = {
         lastInput = 'decimal';
     },
     toggleNegative: function() {
+        let operations = ['addition', 'subtraction', 'multiplication', 'division'];
         if (lockNegative === true) {
             lockNegative = false;
         } else if (lockNegative === false) {
             lockNegative = true;
+        }
+        if (operations.includes(currentOperation)) {
+            currentValue = '-';
+            domOperations.setScreenText(currentValue);
+            return;
         }
         if (lastInput === 'equality') {
             if (lockedValue > 0) {
@@ -368,12 +374,6 @@ const domOperations = {
             domOperations.setScreenText(currentValue);
             return;
         }
-        if (currentValue === undefined) {
-            currentValue = '-';
-            domOperations.setScreenText(currentValue);
-            return;
-        }
-
         if (lockNegative === true) {
             currentValue = -Math.abs(currentValue);
             domOperations.setScreenText(currentValue);
