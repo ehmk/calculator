@@ -323,6 +323,9 @@ const domOperations = {
         lastOperation = '';
         newOperation = false;
         lockNegative = false;
+        while (dataScreens.history.firstChild) {
+            dataScreens.history.removeChild(dataScreens.history.firstChild);
+        }
     },
     clearScreen: function() {
         domOperations.setScreenText('');
@@ -435,6 +438,10 @@ function appendHistory() {
     let setOperationSymbol;
     let currentAnswer;
 
+    if (!lockedValue || !currentValue) {
+        return;
+    }
+
     if (lastOperation === 'addition') {
         setOperationSymbol = '+';
         currentAnswer = parseFloat(lockedValue) + parseFloat(currentValue);
@@ -449,7 +456,7 @@ function appendHistory() {
         currentAnswer = parseFloat(lockedValue) / parseFloat(currentValue);
     }
 
-    if (dataScreens.history.childElementCount > 4) {
+    if (dataScreens.history.childElementCount >= 4) {
         dataScreens.history.removeChild(dataScreens.history.childNodes[0]);
     }
 

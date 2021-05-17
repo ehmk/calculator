@@ -39,6 +39,7 @@ button:hover {
     grid-column-start: 2;
     grid-column-end: 3;
     text-align: center;
+    font-size: 1.5em;
 }
 
 .calculator-container {
