@@ -333,6 +333,10 @@ const domOperations = {
         lastInput = 'clear';
     },
     appendDecimal: function() {
+        if (lastInput === 'toggleNegative') {
+            currentValue += '.';
+            domOperations.setScreenText(currentValue);
+        }
         if (lastOperation === 'equality') {
             this.resetAll();
             domOperations.setScreenText('');
@@ -370,12 +374,14 @@ const domOperations = {
         if (lastInput === 'decimal') {
             currentValue = '-' + currentValue;
             domOperations.setScreenText(currentValue);
+            lastInput = 'toggleNegative';
             return;
         }
         
         if(operations.includes(currentOperation) && lastInput === 'equality') {
             currentValue = '-';
             domOperations.setScreenText(currentValue);
+            lastInput = 'toggleNegative';
             return;
         }
         if (lastInput === 'equality') {
@@ -386,27 +392,24 @@ const domOperations = {
             }
             currentTotal = lockedValue;
             domOperations.setScreenText(lockedValue);
+            lastInput = 'toggleNegative';
             return;
         }
         if (currentValue === undefined) {
             currentValue = '-';
             domOperations.setScreenText(currentValue);
+            lastInput = 'toggleNegative';
             return;
         } else if (lockNegative === true) {
             currentValue = -Math.abs(currentValue);
             domOperations.setScreenText(currentValue);
+            lastInput = 'toggleNegative';
             return;
         } else if (lockNegative === false) {
             currentValue = Math.abs(currentValue);
             domOperations.setScreenText(currentValue);
+            lastInput = 'toggleNegative';
             return;
-        }
-    },
-    convertNumber(num) {
-        if (num > 0) {
-            return -Math.abs(num);
-        } else if (num < 0) {
-            return Math.abs(num);
         }
     },
     appendScreenText: function(a) {
