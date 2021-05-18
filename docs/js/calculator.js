@@ -213,6 +213,7 @@ const domOperations = {
     operate: function(operation) { // operation: addition, subtraction, multiplication, division
         newOperation = true;
         currentOperation = operation;
+        
         let operations = ['addition', 'subtraction', 'multiplication', 'division'];
         for (let i = 0; i < operations.length; i++) {
             if (operations[i] === currentOperation) {
@@ -257,7 +258,6 @@ const domOperations = {
             this.lockCurrentValue();
             firstOperation = false;
         }
-        
         lastInput = operation;
         lastOperation = operation;
         lockNegative = false;
@@ -373,7 +373,7 @@ const domOperations = {
             return;
         }
         
-        if (operations.includes(currentOperation)) {
+        if(operations.includes(currentOperation) && lastInput === 'equality') {
             currentValue = '-';
             domOperations.setScreenText(currentValue);
             return;
