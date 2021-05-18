@@ -333,7 +333,7 @@ const domOperations = {
         lastInput = 'clear';
     },
     appendDecimal: function() {
-        if (currentValue.includes('.')) {
+        if (lastInput === 'decimal') {
             return;
         }
         if (lastInput === 'toggleNegative') {
