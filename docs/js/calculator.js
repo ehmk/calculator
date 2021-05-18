@@ -423,6 +423,9 @@ const domOperations = {
     },
     
     press: function(num, numString) {
+        if (lastOperation === 'equality') {
+            this.resetAll();
+        }
         if (newOperation === true) {
             newOperation = false;
         }
