@@ -278,6 +278,7 @@ const domOperations = {
             this.displayCurrentTotal();
             firstOperation = false;
         }
+        lockNegative = false;
         lastOperation = 'equality';
         lastInput = 'equality';
     },
