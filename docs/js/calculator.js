@@ -333,6 +333,9 @@ const domOperations = {
         lastInput = 'clear';
     },
     appendDecimal: function() {
+        if (currentValue.includes('.')) {
+            return;
+        }
         if (lastInput === 'toggleNegative') {
             currentValue += '.';
             domOperations.setScreenText(currentValue);
