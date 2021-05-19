@@ -81,24 +81,27 @@ button:hover {
 .number-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-gap: 5px;
+    max-height: 270px;
 }
 
 .number-buttons > button {
     background-color: rgb(30, 30, 30);
-    height: 2em;
+    height: 1.7em;
 }
 
 .operation-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-gap: 5px;
-    align-content: start;
+    max-height: 170px;
 }
 
 .operation-buttons > button {
     background-color: rgb(130, 158, 235);
-    height: 2em;
+    height: 1.7em;
 }
 
 /* MEDIA QUERIES */
