@@ -221,10 +221,10 @@ const domOperations = {
             }
         } 
         
-        if (currentValue !== undefined) {
+        if (currentValue) {
             currentValue = parseFloat(currentValue);
         }
-        if (lockedValue !== undefined) {
+        if (lockedValue) {
             lockedValue = parseFloat(lockedValue);
         }
         if (lastInput === operation) {
@@ -249,6 +249,7 @@ const domOperations = {
             this.displayCurrentTotal();
             firstOperation = false;
         } else if (firstOperation === false) {
+            if (!currentValue) return;
             appendHistory();
             currentTotal = lowLevelOperations.operate(operation, lockedValue, currentValue);
             this.lockCurrentTotal();
@@ -265,6 +266,9 @@ const domOperations = {
     equality: function() {
         newOperation = true;
         currentOperation = 'equality';
+        if (!currentValue|| !lockedValue) {
+            return;
+        }
         currentValue = parseFloat(currentValue);
         lockedValue = parseFloat(lockedValue);
         appendHistory();
