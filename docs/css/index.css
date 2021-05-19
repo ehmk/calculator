@@ -20,6 +20,9 @@ button:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5px;
+    max-width: 1400px;
+    text-align: center;
+    margin: 0px auto;
 }
 
 #operation-history {
