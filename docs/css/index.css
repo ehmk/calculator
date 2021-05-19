@@ -107,6 +107,9 @@ button:hover {
     #master-container {
         grid-template-columns: 1fr;
     }
+    #operation-history {
+        display: none;
+    }
     .buttons {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr;
